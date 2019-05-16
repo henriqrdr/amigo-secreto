@@ -3,6 +3,7 @@ import java.util.Random;
 import java.util.Scanner;
 public class Main {
 	Scanner scan1;
+	int conta;
 	public Pessoa[]pessoas;
 	public Mensagem[]msgs;
 	public Main() {
@@ -10,21 +11,47 @@ public class Main {
 		this.pessoas = new Pessoa[10];
 		this.msgs = new Mensagem[10];
 	}
-	
-	public void Menu(){
-		int opcao = 0,conta=0,contamsg=0;
+	public void adm() {
+		System.out.println("Cadastre um administrador");
+		pessoas[conta] = new Pessoa();
+		pessoas[conta].cadastrarAdmin();
+		conta++;
+	}
+	public int login() {
+		System.out.println("******LOGIN******");
+		System.out.println("Digite seu codinome");
+		String user = scan1.nextLine();
+		Pessoa usuario = new Pessoa();
+		usuario = verificaNome(user,conta);
+		if(usuario == null) {
+			System.out.println("Nome nao encontrado");
+			return 0;
+		}
+		System.out.println("Digite sua senha");
+		String senha = scan1.nextLine();
+		if(senha.equals(usuario.senha)) {
+			System.out.println("Login efetuado com sucesso");
+			return usuario.tipo;
+		}
+		else {
+			System.out.println("Senha errada");
+			return 0;
+		}
+	}
+	public int menuAdmin(){
+		int opcao = 0,contamsg=0;
 		this.scan1 = new Scanner(System.in);
-		
 		do {
-		System.out.println("Digite uma opção\n");
-		System.out.println("1 Cadastrar um novo participante");
-		System.out.println("2 Cadastrar sugestão de presente");
+		System.out.println("******MENU ADM******\n");
+		System.out.println("Digite uma opï¿½ï¿½o\n");
+		System.out.println("1 Cadastrar um novo usuario");
+		System.out.println("2 Cadastrar sugestï¿½o de presente");
 		System.out.println("3 Sortear automaticamente");
 		System.out.println("4 Cadastrar uma mensagem");
 		System.out.println("5 Listar mensagens enviadas");
-		System.out.println("6 Exibir sugestão de presente ");
-		System.out.println("7 Cadastrar uma sugestão");
-		System.out.println("8 Listar sugestões ");
+		System.out.println("6 Exibir sugestï¿½o de presente ");
+		System.out.println("7 Cadastrar uma sugestï¿½o");
+		System.out.println("8 Listar sugestï¿½es ");
 		System.out.println("9 Ranking de mensagens ");
 		System.out.println("10 Revelar amigo secreto ");
 		System.out.println("11 Cadastrar e exibir aviso geral ");
@@ -32,19 +59,19 @@ public class Main {
 		System.out.println("0 Para sair ");
 		opcao = this.scan1.nextInt();
 			if (opcao >12) {
-				System.out.println("Opção inválida");
+				System.out.println("Opï¿½ï¿½o invï¿½lida");
 				opcao = 0;
 			}
 				
 		switch (opcao) {
 			case 1:
-				System.out.println("1 Para cadastrar um novo participante");
+				System.out.println("1 Para cadastrar um novo usuario");
 				pessoas[conta] = new Pessoa();
-				pessoas[conta].cadastrar();
+				pessoas[conta].cadastrarUser();
 				conta++;
 				break;
 			case 2:
-				System.out.println("2 Cadastrar sugestão de presente");
+				System.out.println("2 Cadastrar sugestï¿½o de presente");
 				System.out.println("Digite o codinome que deseja cadastrar o presente");
 				scan1.nextLine();
 				String pesquisapresente = scan1.nextLine();
@@ -55,7 +82,7 @@ public class Main {
 					break;
 				}
 				System.out.println(spresente.toString());
-				System.out.println("Qual a sujestão do presente?");
+				System.out.println("Qual a sujestï¿½o do presente?");
 				spresente.presente = scan1.nextLine();
 				
 				break;
@@ -95,13 +122,13 @@ public class Main {
 				listarMensagens(contamsg);
 				break;
 			case 6:
-				System.out.println("6 Exibir sugestão de presente ");
+				System.out.println("6 Exibir sugestï¿½o de presente ");
 				break;
 			case 7:
-				System.out.println("7 Cadastrar uma sugestão");
+				System.out.println("7 Cadastrar uma sugestï¿½o");
 				break;
 			case 8:
-				System.out.println("8 Listar sugestões ");
+				System.out.println("8 Listar sugestï¿½es ");
 				break;
 			case 9:
 				System.out.println("9 Ranking de mensagens ");
@@ -122,8 +149,33 @@ public class Main {
 			}
 		
 		}while (opcao != 0);
-		
-	}	
+		return 0;
+	}
+	public int menuUser() {
+		int opcao = 0;
+		do {
+		System.out.println("******MENU USUARIO******\n");
+		System.out.println("Digite uma opï¿½ï¿½o\n");
+		System.out.println("1 Mostrar Amigo Secreto");
+		System.out.println("2 Enviar uma Mensagem");
+		System.out.println("3 Trocar senha");
+		System.out.println("4 Cadastrar uma sujestao\n");
+		System.out.println("0 Para sair\n");
+		opcao = this.scan1.nextInt();
+			if (opcao >4) {
+				System.out.println("Opï¿½ï¿½o invï¿½lida");
+				opcao = 0;
+			}
+		switch (opcao) {
+			case 1:
+				System.out.println("1 Para cadastrar um novo usuario");
+				pessoas[conta] = new Pessoa();
+				pessoas[conta].cadastrarUser();
+				conta++;
+				break;}
+		}while (opcao != 0);
+		return 0;
+	}
 	public void listarpessoas(int conta) {
 		for (int i = 0; i < conta; i++) {
 			System.out.println(pessoas[i].toString());
@@ -158,7 +210,20 @@ public class Main {
 		}
 	public static void main(String args[]){
 		Main p = new Main();
-		p.Menu();
+		int user = 0 ;
+		p.adm();
+		while(user == 0) {
+			user = p.login();
+			if(user == 1) {
+			user = p.menuAdmin();
+			}
+			else { if(user == 2) {
+				user = p.menuUser();
+				}
+			
+			}
+		}
+		
 	}
 
 }
